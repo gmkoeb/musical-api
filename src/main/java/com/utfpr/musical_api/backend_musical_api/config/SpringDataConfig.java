@@ -24,7 +24,7 @@ public class SpringDataConfig {
 
         dataSource.setUsername("sanrise");
         dataSource.setPassword("123456");
-        dataSource.setJdbcUrl("jdbc:mariadb://192.168.18.193:3306");
+        dataSource.setJdbcUrl("jdbc:mariadb://192.168.18.193:3306/dbtest");
         dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
 
         return dataSource;
