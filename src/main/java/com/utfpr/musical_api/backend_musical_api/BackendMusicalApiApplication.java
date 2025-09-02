@@ -42,7 +42,21 @@ public class BackendMusicalApiApplication {
 			Musica musica = new Musica();
 			musica.setDuracao(250);
 			musica.setTitulo("Billie Jean");
-			musicaService.salvar(musica, categoria);
+			try {
+				musicaService.salvar(musica, categoria);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+
+			Musica musica2 = new Musica();
+			musica2.setDuracao(250);
+			musica2.setTitulo("Billie Jean");
+
+			try {
+				musicaService.salvar(musica2, categoria);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
 
 			for(Musica m : musicaService.listar()) {
 				log.info(m.toString());
