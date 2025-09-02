@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "categorias")
+@Table(name = "categorias", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "nome_categoria")
+})
 @Data
 public class Categoria {
     @Id
@@ -12,6 +14,9 @@ public class Categoria {
     @Column(name = "cod_categoria", nullable = false)
     private Long id;
 
-    @Column(name = "desc_categoria", length = 50)
+    @Column(name = "nome_categoria", length = 50, unique = true, nullable = false)
+    private String name;
+
+    @Column(name = "desc_categoria", length = 250)
     private String descCategoria;
 }

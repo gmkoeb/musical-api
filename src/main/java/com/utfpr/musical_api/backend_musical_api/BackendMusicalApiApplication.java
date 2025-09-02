@@ -1,13 +1,59 @@
 package com.utfpr.musical_api.backend_musical_api;
 
+import com.utfpr.musical_api.backend_musical_api.entity.Categoria;
+import com.utfpr.musical_api.backend_musical_api.entity.Musica;
+import com.utfpr.musical_api.backend_musical_api.service.CategoriaService;
+import com.utfpr.musical_api.backend_musical_api.service.MusicaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class BackendMusicalApiApplication {
+	private static final Logger log = LoggerFactory.getLogger(BackendMusicalApiApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackendMusicalApiApplication.class, args);
 	}
 
+	@Bean
+	public CommandLineRunner demo(CategoriaService categoriaService, MusicaService musicaService) {
+		return (args) -> {
+			for(Musica m : musicaService.listar()) {
+				log.info(m.toString());
+				log.info(m.getTitulo());
+				musicaService.remover(m);
+			}
+
+			for(Categoria c : categoriaService.listar()) {
+				log.info(c.toString());
+				categoriaService.remover(c);
+			}
+
+			Categoria categoria = new Categoria();
+			categoria.setName("Pop");
+			categoria.setDescCategoria("A música pop é um género musical derivado do termo \"popular\", " +
+					"conhecido pela sua acessibilidade e apelo comercial");
+			categoriaService.salvar(categoria);
+
+			Musica musica = new Musica();
+			musica.setDuracao(250);
+			musica.setTitulo("Billie Jean");
+			musicaService.salvar(musica, categoria);
+
+			for(Musica m : musicaService.listar()) {
+				log.info(m.toString());
+				log.info(m.getTitulo());
+				musicaService.remover(m);
+			}
+
+			for(Categoria c : categoriaService.listar()) {
+				log.info(c.toString());
+				categoriaService.remover(c);
+			}
+		};
+	}
 }
