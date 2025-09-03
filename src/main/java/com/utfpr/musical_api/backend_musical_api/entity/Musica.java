@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "musicas")
+@Table(name = "musicas", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "titulo")
+})
 @Data
 public class Musica {
     @Id
@@ -16,8 +18,9 @@ public class Musica {
     @JoinColumn(name = "cod_categoria", nullable = false)
     private Categoria categoria;
 
-    @Column(length = 100)
+    @Column(length = 100, unique = true, nullable = false)
     private String titulo;
 
+    @Column(nullable = false)
     private Integer duracao;
 }
