@@ -1,7 +1,7 @@
 package com.utfpr.musical_api.backend_musical_api.service;
 
 import com.utfpr.musical_api.backend_musical_api.entity.Categoria;
-import com.utfpr.musical_api.backend_musical_api.exceptions.CategoriaExistsException;
+import com.utfpr.musical_api.backend_musical_api.exceptions.CategoriaBusinessException;
 import com.utfpr.musical_api.backend_musical_api.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,10 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository repository;
 
-    public void salvar(Categoria categoria) throws CategoriaExistsException {
+    public void salvar(Categoria categoria) throws CategoriaBusinessException {
         if(repository.findByNome(categoria.getNome()).isPresent()) {
-            throw new CategoriaExistsException("Categoria com nome: " +  categoria.getNome() + " já existe.");
+            throw new CategoriaBusinessException("Categoria com nome: " +  categoria.getNome() + " já existe.",
+                    CategoriaBusinessException.Reason.NAME_ALREADY_EXISTS);
         }
         repository.save(categoria);
     }

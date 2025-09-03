@@ -2,6 +2,8 @@ package com.utfpr.musical_api.backend_musical_api;
 
 import com.utfpr.musical_api.backend_musical_api.entity.Categoria;
 import com.utfpr.musical_api.backend_musical_api.entity.Musica;
+import com.utfpr.musical_api.backend_musical_api.exceptions.CategoriaBusinessException;
+import com.utfpr.musical_api.backend_musical_api.exceptions.MusicaBusinessException;
 import com.utfpr.musical_api.backend_musical_api.service.CategoriaService;
 import com.utfpr.musical_api.backend_musical_api.service.MusicaService;
 import org.slf4j.Logger;
@@ -39,23 +41,26 @@ public class BackendMusicalApiApplication {
 					"conhecido pela sua acessibilidade e apelo comercial");
 			try {
 				categoriaService.salvar(categoria);
-			} catch (Exception e) {
+			} catch (CategoriaBusinessException e) {
 				log.error(e.getMessage());
+				log.error(e.getReason().toString());
 			}
 			Categoria categoria2 = new Categoria();
 			categoria.setNome("Pop");
 			try {
 				categoriaService.salvar(categoria);
-			} catch (Exception e) {
+			} catch (CategoriaBusinessException e) {
 				log.error(e.getMessage());
+				log.error(e.getReason().toString());
 			}
 			Musica musica = new Musica();
 			musica.setDuracao(250);
 			musica.setTitulo("Billie Jean");
 			try {
 				musicaService.salvar(musica, categoria);
-			} catch (Exception e) {
+			} catch (MusicaBusinessException e) {
 				log.error(e.getMessage());
+				log.error(e.getReason().toString());
 			}
 
 			Musica musica2 = new Musica();
@@ -64,8 +69,9 @@ public class BackendMusicalApiApplication {
 
 			try {
 				musicaService.salvar(musica2, categoria);
-			} catch (Exception e) {
+			} catch (MusicaBusinessException e) {
 				log.error(e.getMessage());
+				log.error(e.getReason().toString());
 			}
 
 			for(Musica m : musicaService.listar()) {
