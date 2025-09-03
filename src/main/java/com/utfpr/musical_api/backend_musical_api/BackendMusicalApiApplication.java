@@ -34,11 +34,21 @@ public class BackendMusicalApiApplication {
 			}
 
 			Categoria categoria = new Categoria();
-			categoria.setName("Pop");
+			categoria.setNome("Pop");
 			categoria.setDescCategoria("A música pop é um género musical derivado do termo \"popular\", " +
 					"conhecido pela sua acessibilidade e apelo comercial");
-			categoriaService.salvar(categoria);
-
+			try {
+				categoriaService.salvar(categoria);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+			Categoria categoria2 = new Categoria();
+			categoria.setNome("Pop");
+			try {
+				categoriaService.salvar(categoria);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
 			Musica musica = new Musica();
 			musica.setDuracao(250);
 			musica.setTitulo("Billie Jean");
