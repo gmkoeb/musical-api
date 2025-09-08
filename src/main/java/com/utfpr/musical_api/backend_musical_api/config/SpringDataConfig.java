@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class SpringDataConfig {
     @Bean
+    @Profile("!test")
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
 
@@ -31,13 +33,24 @@ public class SpringDataConfig {
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
+    @Profile("test")
+    public DataSource testDataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setUsername("root");
+        dataSource.setPassword("root");
+        dataSource.setJdbcUrl("jdbc:h2:mem:test");
+
+        return dataSource;
+    }
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);
 
-        factory.setDataSource(dataSource());
+        factory.setDataSource(dataSource);
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.utfpr.musical_api.backend_musical_api.entity");
         factory.afterPropertiesSet();
@@ -46,9 +59,9 @@ public class SpringDataConfig {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory());
+        transactionManager.setEntityManagerFactory(entityManagerFactory(dataSource));
         transactionManager.setJpaDialect(new HibernateJpaDialect());
 
         return transactionManager;

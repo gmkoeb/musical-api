@@ -19,7 +19,7 @@ public class MusicaService {
     private CategoriaRepository categoriaRepository;
 
     public void salvar(Musica musica, Categoria categoria) throws MusicaBusinessException {
-        if (categoriaRepository.findById(categoria.getId()).isEmpty()) {
+        if (categoriaRepository.findByNome(categoria.getNome()).isEmpty()) {
             categoriaRepository.save(categoria);
         }
 
